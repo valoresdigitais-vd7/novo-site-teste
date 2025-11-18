@@ -7,108 +7,124 @@ export const SITE_NAV_LINKS: NavLink[] = [
 
 export const LANDING_NAV_LINKS: NavLink[] = [
   { name: 'Início', href: '/' },
-  { name: 'A Solução', href: '#problem-solution' },
-  { name: 'Benefícios', href: '#benefits' },
-  { name: 'Depoimentos', href: '#testimonials' },
-  { name: 'Planos', href: '#investment' },
+  { name: 'Funcionalidades', href: '#features' },
+  { name: 'Planos', href: '#plans' },
+  { name: 'Comunidade', href: '#community' },
   { name: 'FAQ', href: '#faq' },
 ];
 
 export const PRODUCTS: Product[] = [
   {
     id: 1,
-    name: 'Plano Básico',
-    price: 'R$ 29/mês',
-    features: ['Recurso Essencial 1', 'Recurso Essencial 2', 'Suporte por Email'],
+    name: 'Flow Starter (Gratuito)',
+    price: 'R$ 0/mês',
+    features: [
+      'Criação de até 3 hábitos simultâneos',
+      'Acompanhamento diário básico',
+      'Acesso à comunidade aberta',
+    ],
   },
   {
     id: 2,
-    name: 'Plano Pro',
-    price: 'R$ 79/mês',
-    features: ['Todos os recursos do Básico', 'Recurso Avançado 1', 'Recurso Avançado 2', 'Suporte Prioritário'],
+    name: 'Flow Pro (Individual)',
+    price: 'R$ 29/mês',
+    features: [
+      'Hábitos ilimitados e histórico completo',
+      'Sistema de XP e recompensas visuais',
+      'Streak Shield – congele sequência até 3 dias/mês',
+      'Integração com Apple Health / Google Fit',
+      'Widget Interativo para plataformas Mobile',
+      'Suporte prioritário por e‑mail',
+    ],
     isFeatured: true,
   },
   {
     id: 3,
-    name: 'Plano Empresa',
-    price: 'R$ 299/mês',
-    features: ['Todos os recursos do Pro', 'Dashboard de Equipe', 'Integrações Premium', 'Gerente de Conta Dedicado'],
+    name: 'Flow Teams (Empresarial)',
+    price: 'R$ 99/mês',
+    features: [
+      'Todos os recursos do Flow Pro',
+      'Painel de equipe e gestão de grupos',
+      'Desafios personalizáveis entre squads',
+      'Gerente de conta dedicado',
+    ],
   },
 ];
 
 export const TESTIMONIALS: Testimonial[] = [
   {
-    quote: 'Este produto transformou completamente nosso fluxo de trabalho. Não consigo imaginar trabalhar sem ele.',
-    author: 'Ana Silva',
-    role: 'CEO, Tech Solutions',
-    avatarUrl: 'https://picsum.photos/id/1011/100/100',
+    quote:
+      'O HabitFlow mudou completamente minha relação com a produtividade. Agora consigo manter hábitos sem me sentir sobrecarregada!',
+    author: 'Mariana Lopes',
+    role: 'Empreendedora e Usuária Flow Pro',
+    avatarUrl: 'https://picsum.photos/id/1027/100/100',
   },
   {
-    quote: 'O suporte ao cliente é excepcional e a plataforma é incrivelmente fácil de usar. Recomendo fortemente!',
-    author: 'Carlos Pereira',
-    role: 'Diretor de Marketing, Creative Co.',
-    avatarUrl: 'https://picsum.photos/id/1012/100/100',
+    quote:
+      'O sistema de gamificação me mantém motivado dia após dia. Adoro desbloquear novos níveis enquanto melhoro de verdade.',
+    author: 'Rafa Santos',
+    role: 'Designer de Produto',
+    avatarUrl: 'https://picsum.photos/id/1005/100/100',
   },
   {
-    quote: 'Um divisor de águas para nossa produtividade. O ROI foi quase imediato.',
-    author: 'Juliana Costa',
-    role: 'Gerente de Operações, Innovate Ltda.',
-    avatarUrl: 'https://picsum.photos/id/1013/100/100',
-  },
-  {
-    quote: 'Design elegante, funcionalidade poderosa. A equipe por trás disso realmente entende as necessidades do cliente.',
-    author: 'Ricardo Mendes',
-    role: 'Desenvolvedor Frontend, Web Crafters',
-    avatarUrl: 'https://picsum.photos/id/1014/100/100',
+    quote:
+      'Usamos o Flow Teams na empresa e vimos o engajamento da equipe disparar. É leve, divertido e eficiente.',
+    author: 'Beatriz Lima',
+    role: 'Gerente de RH, InovaCorp',
+    avatarUrl: 'https://picsum.photos/id/1015/100/100',
   },
 ];
 
 export const FAQ_DATA = [
-    {
-        question: 'O teste grátis realmente é grátis?',
-        answer: 'Sim, o nosso teste de 7 dias é 100% gratuito e não exige cartão de crédito. Você terá acesso a todos os recursos do plano Pro para experimentar a plataforma sem compromissos.'
-    },
-    {
-        question: 'Posso cancelar a qualquer momento?',
-        answer: 'Com certeza. Você pode cancelar sua assinatura a qualquer momento, diretamente no seu painel de controle, com apenas alguns cliques. Sem burocracia ou taxas de cancelamento.'
-    },
-    {
-        question: 'Funciona offline?',
-        answer: 'Nossa plataforma é baseada na nuvem e requer uma conexão com a internet para a maioria das funcionalidades. No entanto, estamos desenvolvendo recursos que permitirão o acesso a certas informações offline.'
-    },
-    {
-        question: 'Tem integração com outras ferramentas?',
-        answer: 'Sim! Oferecemos integrações nativas com diversas ferramentas populares do mercado, como Slack, Google Drive, Trello e muitas outras. Além disso, nossa API está disponível para integrações personalizadas.'
-    },
-    {
-        question: 'Meus dados ficam seguros?',
-        answer: 'A segurança dos seus dados é nossa maior prioridade. Utilizamos criptografia de ponta (AES-256), servidores seguros e seguimos as melhores práticas de segurança do mercado para garantir que suas informações estejam sempre protegidas.'
-    }
+  {
+    question: 'O que é o HabitFlow?',
+    answer:
+      'O HabitFlow é um app de gestão de hábitos que usa gamificação e ciência comportamental para ajudar você a construir consistência e alcançar seus objetivos de forma leve e sustentável.',
+  },
+  {
+    question: 'O plano gratuito tem limitações?',
+    answer:
+      'Sim. O plano Flow Starter permite até 3 hábitos ativos e recursos básicos. Você pode fazer upgrade a qualquer momento para desbloquear todos os recursos Pro.',
+  },
+  {
+    question: 'Como funciona o Streak Shield?',
+    answer:
+      'O Streak Shield permite “congelar” sua sequência por até 3 dias por mês usando moedas virtuais, garantindo que imprevistos não estraguem sua consistência.',
+  },
+  {
+    question: 'Posso usar o HabitFlow em mais de um dispositivo?',
+    answer:
+      'Sim! Sua conta sincroniza automaticamente entre Web, iOS e Android.',
+  },
+  {
+    question: 'Meus dados estão seguros?',
+    answer:
+      'Sim. Utilizamos criptografia de ponta (AES‑256) e seguimos as melhores práticas de segurança para proteger todas as informações pessoais e de hábitos.',
+  },
 ];
 
 export const FOOTER_LINKS = {
-    company: {
-        name: 'Produto x',
-        description: 'Transformando produtividade em resultados desde 2020.',
-        cnpj: 'CNPJ: 12.345.678/0001-90',
-        address: 'Endereço: Rua das Flores, 123 - São Paulo/SP',
+  company: {
+    name: 'HabitFlow',
+    description:
+      'Construa consistência, desbloqueie sua melhor versão. Aplicativo de gestão de hábitos com ciência e gamificação.',
+    cnpj: 'CNPJ: 45.987.654/0001-32',
+    address: 'Endereço: Av. da Consistência, 500 - São Paulo/SP',
+  },
+  support: [
+    {
+      name: 'suporte@habitflow.app',
+      href: 'mailto:suporte@habitflow.app',
     },
-    support: [
-        { name: 'suporte@taskflowpro.com', href: 'mailto:suporte@taskflowpro.com' },
-        { name: '(11) 3333-4444', href: 'tel:+551133334444' },
-        { name: 'Central de Ajuda', href: '#' },
-        { name: 'Status do Sistema', href: '#' },
-    ],
-    legal: [
-        { name: 'Termos de Uso', href: '/termos-de-servico' },
-        { name: 'Política de Privacidade', href: '/politica-de-privacidade' },
-        { name: 'Política de Cookies', href: '/politica-de-cookies' },
-        { name: 'Política de Reembolso', href: '/devolucoes-e-trocas' },
-    ],
-    enterprise: [
-        { name: 'Sobre Nós', href: '#' },
-        { name: 'Carreiras', href: '#' },
-        { name: 'Imprensa', href: '#' },
-        { name: 'Contato', href: '/contato' },
-    ],
+    { name: '(11) 9999-8888', href: 'tel:+551199998888' },
+    { name: 'Central de Ajuda', href: '#' },
+  ],
+  legal: [
+    { name: 'Termos de Uso', href: '/termos-de-uso' },
+    { name: 'Política de Privacidade', href: '/politica-de-privacidade' },
+  ],
+  enterprise: [
+    { name: 'Sobre Nós', href: '#sobre' },
+    { name: 'Contato', href: '/contato' },
+  ],
 };
