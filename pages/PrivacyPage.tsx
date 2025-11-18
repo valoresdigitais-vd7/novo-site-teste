@@ -1,4 +1,3 @@
-tsx
 import React from 'react';
 
 const LegalPageLayout: React.FC<{ title: string; lastUpdated: string; children: React.ReactNode }> = ({ title, lastUpdated, children }) => (
