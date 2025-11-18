@@ -12,14 +12,19 @@ export default {
     extend: {
       colors: {
         primary: {
-          DEFAULT: '#0891b2', // cyan-600
-          light: '#22d3ee',   // cyan-400
-          dark: '#0e7490',    // cyan-700
+          DEFAULT: '#5B8DEF', // azul médio - cor de destaque principal
+          light: '#A7C7FF',   // azul claro - foco, hover e linhas sutis
+          dark: '#1E40AF',    // azul escuro - botões e textos sobre fundos claros
         },
         secondary: {
-          DEFAULT: '#f97316', // orange-500
-          light: '#fb923c',   // orange-400
-          dark: '#ea580c',    // orange-600
+          DEFAULT: '#A78BFA', // lilás principal
+          light: '#C4B5FD',   // lilás claro
+          dark: '#7C3AED',    // lilás escuro
+        },
+        accent: {
+          DEFAULT: '#4ADE80', // verde menta suave
+          light: '#86EFAC',
+          dark: '#22C55E',
         },
         neutral: {
           100: '#f8fafc', // slate-50
@@ -34,7 +39,7 @@ export default {
         }
       },
       fontFamily: {
-        sans: ['Inter', 'sans-serif'],
+        sans: ['Poppins', 'Inter', 'sans-serif'],
       },
     },
   },
