@@ -1,335 +1,209 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import { TESTIMONIALS } from '../constants';
+import { CheckCircleIcon, ZapIcon, ShieldIcon } from '../components/icons';
 
-// Paleta HabitFlow: azul (#3B82F6), lilás (#A78BFA), menta (#34D399)
-// Tipografia sugerida: Inter ou Poppins
-// A estrutura usa classes Tailwind (compatível com seu projeto atual)
+// --- SHARED COMPONENTS ---
 
-// --------------------------
-// Formulário Inline
-// --------------------------
-const InlineCheckoutForm = ({ productName }) => {
-  const [email, setEmail] = useState('');
-  const [status, setStatus] = useState('idle');
-  const [message, setMessage] = useState('');
+// InlineSignupForm Component (Adapted for Freemium Model)
+interface InlineSignupFormProps {
+    planName: string;
+}
+const InlineSignupForm: React.FC<InlineSignupFormProps> = ({ planName }) => {
+    const [email, setEmail] = useState('');
+    const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+    const [message, setMessage] = useState('');
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setStatus('loading');
-    setMessage('');
-    await new Promise(r => setTimeout(r, 1200));
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setStatus('loading');
+        setMessage('');
 
-    if (email.includes('@')) {
-      setStatus('success');
-      setMessage(`Obrigado! Em breve enviaremos seu acesso ao ${productName}.`);
-    } else {
-      setStatus('error');
-      setMessage('Digite um email válido.');
-    }
-  };
+        // Simulate API call for signup
+        await new Promise(resolve => setTimeout(resolve, 1500));
 
-  return (
-    <form onSubmit={handleSubmit} className="mt-6">
-      <div className="flex flex-col sm:flex-row gap-3">
-        <input
-          type="email"
-          placeholder="Seu melhor email"
-          value={email}
-          onChange={e => setEmail(e.target.value)}
-          required
-          className="flex-1 px-4 py-3 rounded-md border border-neutral-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-        />
-        <button
-          type="submit"
-          disabled={status === 'loading'}
-          className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-md transition-transform hover:scale-105"
-        >
-          {status === 'loading' ? 'Enviando...' : 'Quero Começar Agora'}
-        </button>
-      </div>
+        if (email && email.includes('@')) {
+            setStatus('success');
+            setMessage(`Bem-vindo ao Esquadrão! Enviamos o link de acesso ao ${planName} para seu email.`);
+        } else {
+            setStatus('error');
+            setMessage('Por favor, insira um email válido para iniciar sua jornada.');
+        }
+    };
 
-      {message && (
-        <p className={`mt-3 text-sm ${status === 'success' ? 'text-green-600' : 'text-red-600'}`}>
-          {message}
-        </p>
-      )}
-    </form>
-  );
-};
-
-// --------------------------
-// 1. HERO SECTION
-// --------------------------
-const HeroSection = () => (
-  <section className="py-24">
-    <div className="container mx-auto px-6 text-center max-w-4xl">
-      <h1 className="text-4xl md:text-6xl font-extrabold text-neutral-900">
-        Construa Hábitos que Duram e Transforme Sua Vida com o HabitFlow
-      </h1>
-
-      <p className="mt-4 text-xl text-neutral-600">
-        O app que une gamificação + ciência comportamental para te manter consistente todos os dias.
-      </p>
-
-      <div className="max-w-lg mx-auto">
-        <InlineCheckoutForm productName="HabitFlow PRO" />
-      </div>
-
-      <img
-        src="/mockup-habitflow.png"
-        alt="Mockup HabitFlow"
-        className="mt-12 mx-auto w-full max-w-md drop-shadow-xl"
-      />
-    </div>
-  </section>
-);
-
-// --------------------------
-// 2. O PROBLEMA
-// --------------------------
-const ProblemSection = () => (
-  <section className="py-20 bg-neutral-100">
-    <div className="container mx-auto px-6 max-w-4xl text-center">
-      <h2 className="text-3xl font-bold">Você sabe o que precisa fazer. O difícil é manter a consistência.</h2>
-
-      <p className="mt-4 text-neutral-600">
-        A maioria das pessoas não falha por falta de vontade, mas por falta de sistema.
-      </p>
-
-      <ul className="mt-8 text-left mx-auto max-w-md space-y-3 text-neutral-700">
-        <li>• Dificuldade em manter hábitos por mais de 1 semana</li>
-        <li>• Falta de motivação ou clareza no dia a dia</li>
-        <li>• Tentativa e erro sem progresso real</li>
-        <li>• Apps complexos que não ajudam na prática</li>
-      </ul>
-
-      <img
-        src="/img-problema.png"
-        alt="Pessoa frustrada"
-        className="mt-10 mx-auto max-w-sm opacity-90"
-      />
-    </div>
-  </section>
-);
-
-// --------------------------
-// 3. A SOLUÇÃO
-// --------------------------
-const SolutionSection = () => (
-  <section className="py-20">
-    <div className="container mx-auto px-6 max-w-5xl text-center">
-      <h2 className="text-3xl font-bold text-neutral-900">HabitFlow: Seu Sistema de Construção de Hábitos</h2>
-
-      <p className="mt-4 text-neutral-600 max-w-2xl mx-auto">
-        A combinação ideal de gamificação, neurociência e micro-hábitos para finalmente tirar seus objetivos do papel.
-      </p>
-
-      <div className="mt-10 grid md:grid-cols-3 gap-8 text-left">
-        <div className="p-6 rounded-lg bg-blue-50">
-          <h3 className="font-bold text-blue-700">Gamificação</h3>
-          <p className="mt-2 text-neutral-600">Pontuação, streaks e recompensas que mantêm você motivado.</p>
-        </div>
-
-        <div className="p-6 rounded-lg bg-purple-50">
-          <h3 className="font-bold text-purple-700">Ciência Comportamental</h3>
-          <p className="mt-2 text-neutral-600">Hábitos projetados com base em modelos validados.</p>
-        </div>
-
-        <div className="p-6 rounded-lg bg-emerald-50">
-          <h3 className="font-bold text-emerald-700">Consistência Sem Força de Vontade</h3>
-          <p className="mt-2 text-neutral-600">Aplique micropassos simples e sustentáveis.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-);
-
-// --------------------------
-// 4. O QUE VOCÊ RECEBE
-// --------------------------
-const ReceiveSection = () => (
-  <section className="py-20 bg-neutral-100">
-    <div className="container mx-auto px-6 max-w-4xl text-center">
-      <h2 className="text-3xl font-bold">O que você vai receber</h2>
-
-      <ul className="mt-10 space-y-4 text-left mx-auto max-w-lg text-neutral-700">
-        <li>• App HabitFlow completo (web + mobile)</li>
-        <li>• Biblioteca de hábitos prontos para uso</li>
-        <li>• Trilha guiada para construir seu Sistema Pessoal</li>
-        <li>• Templates de rotinas matinais/nocturnas</li>
-        <li>• Comunidade exclusiva</li>
-        <li>• Garantia incondicional de 7 dias</li>
-      </ul>
-    </div>
-  </section>
-);
-
-// --------------------------
-// 5. PROVA SOCIAL
-// --------------------------
-const TestimonialsSection = () => {
-  const testimonials = [
-    { name: 'Laura', quote: 'Finalmente consegui manter um hábito por mais de 30 dias!' },
-    { name: 'Carlos', quote: 'O HabitFlow mudou minha disciplina de forma leve e divertida.' },
-    { name: 'Amanda', quote: 'Nunca imaginei que gamificação fosse funcionar tanto comigo.' }
-  ];
-
-  return (
-    <section className="py-20">
-      <div className="container mx-auto px-6 text-center max-w-4xl">
-        <h2 className="text-3xl font-bold">Resultados Reais de Pessoas Reais</h2>
-
-        <div className="mt-10 grid md:grid-cols-3 gap-8">
-          {testimonials.map((t, i) => (
-            <div key={i} className="bg-white p-6 rounded-xl shadow">
-              <p className="italic text-neutral-700">"{t.quote}"</p>
-              <p className="mt-4 font-semibold">{t.name}</p>
+    return (
+        <form onSubmit={handleSubmit} className="mt-8 w-full max-w-lg mx-auto">
+            <div className="flex flex-col sm:flex-row gap-3">
+                <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Seu melhor email"
+                    required
+                    className="flex-grow px-5 py-4 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all shadow-sm text-slate-900 dark:text-white"
+                    disabled={status === 'loading'}
+                />
+                <button
+                    type="submit"
+                    className="bg-teal-500 hover:bg-teal-600 text-white font-bold py-4 px-8 rounded-full transition-all transform hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 disabled:bg-opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
+                    disabled={status === 'loading'}
+                >
+                    {status === 'loading' ? 'Iniciando...' : 'Começar Grátis'}
+                </button>
             </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
+            {message && (
+                <p className={`mt-4 text-sm font-medium ${status === 'success' ? 'text-teal-600 dark:text-teal-400' : 'text-rose-500 dark:text-rose-400'}`}>
+                    {message}
+                </p>
+            )}
+        </form>
+    );
 };
 
-// --------------------------
-// 6. ANTES VS DEPOIS
-// --------------------------
-const BeforeAfterSection = () => (
-  <section className="py-20 bg-blue-50">
-    <div className="container mx-auto px-6 max-w-5xl">
-      <h2 className="text-3xl font-bold text-center">A transformação</h2>
+// --- SECTIONS ---
 
-      <div className="mt-12 grid md:grid-cols-2 gap-10">
-        <div className="p-6 bg-white rounded-xl shadow">
-          <h3 className="font-bold text-red-500 mb-4">Antes</h3>
-          <ul className="space-y-2 text-neutral-700">
-            <li>• Falta de clareza</li>
-            <li>• Ansiedade e procrastinação</li>
-            <li>• Começa e para toda hora</li>
-            <li>• Falta de motivação</li>
-          </ul>
+const HeroSection: React.FC = () => (
+    <section className="py-24 md:py-36 bg-slate-50 dark:bg-slate-900 relative overflow-hidden">
+        {/* Decorative background elements reflecting the 'Mint/Lilac' palette */}
+        <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none opacity-30">
+            <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-indigo-300 rounded-full blur-3xl filter mix-blend-multiply dark:mix-blend-overlay"></div>
+            <div className="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-teal-200 rounded-full blur-3xl filter mix-blend-multiply dark:mix-blend-overlay"></div>
         </div>
 
-        <div className="p-6 bg-white rounded-xl shadow">
-          <h3 className="font-bold text-emerald-600 mb-4">Depois</h3>
-          <ul className="space-y-2 text-neutral-700">
-            <li>• Clareza total sobre seus hábitos</li>
-            <li>• Avanço contínuo (streaks e recompensas)</li>
-            <li>• Rotinas sólidas</li>
-            <li>• Autonomia e constância</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
-);
-
-// --------------------------
-// 7. COMO FUNCIONA
-// --------------------------
-const StepsSection = () => (
-  <section className="py-20">
-    <div className="container mx-auto px-6 max-w-4xl text-center">
-      <h2 className="text-3xl font-bold">Como funciona na prática</h2>
-
-      <ol className="mt-10 space-y-6 text-left mx-auto max-w-md text-neutral-700">
-        <li>1. Clique no botão e faça sua inscrição</li>
-        <li>2. Acesse o app HabitFlow</li>
-        <li>3. Escolha seus hábitos ou use os prontos</li>
-        <li>4. Siga os micropassos diários</li>
-        <li>5. Acompanhe sua evolução com gamificação</li>
-      </ol>
-    </div>
-  </section>
-);
-
-// --------------------------
-// 8. QUEM INDICA
-// --------------------------
-const AuthorSection = () => (
-  <section className="py-20 bg-neutral-100">
-    <div className="container mx-auto px-6 max-w-4xl text-center">
-      <h2 className="text-3xl font-bold">Quem Recomenda</h2>
-
-      <img
-        src="/autor.png"
-        alt="Autor"
-        className="mx-auto w-32 h-32 rounded-full mt-8 object-cover"
-      />
-
-      <p className="mt-6 text-neutral-700 max-w-2xl mx-auto">
-        Sou especialista em produtividade há 7 anos e desenvolvi o HabitFlow
-        após perceber que disciplina não depende de força de vontade,
-        mas sim de comportamento, recompensas e consistência.
-      </p>
-    </div>
-  </section>
-);
-
-// --------------------------
-// 9. FAQ
-// --------------------------
-const FAQSection = () => {
-  const faq = [
-    { q: 'Preciso ter experiência?', a: 'Não, o HabitFlow funciona para iniciantes.' },
-    { q: 'Preciso aparecer em vídeos?', a: 'Não, tudo é 100% privado.' },
-    { q: 'Quanto tempo leva por dia?', a: 'De 5 a 10 minutos.' },
-    { q: 'Tem garantia?', a: 'Sim, garantia incondicional de 7 dias.' }
-  ];
-
-  return (
-    <section className="py-20">
-      <div className="container mx-auto px-6 max-w-4xl">
-        <h2 className="text-3xl font-bold text-center">Perguntas Frequentes</h2>
-
-        <div className="mt-10 space-y-6">
-          {faq.map((f, i) => (
-            <div key={i} className="p-4 bg-neutral-100 rounded-lg">
-              <p className="font-bold">{f.q}</p>
-              <p className="text-neutral-700 mt-1">{f.a}</p>
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div className="flex flex-col gap-10 items-center">
+                <div className="text-center max-w-4xl">
+                    <span className="inline-block py-1 px-3 rounded-full bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300 text-xs font-bold tracking-wide mb-6 uppercase">
+                        Disponível para iOS, Android & Web
+                    </span>
+                    <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-slate-900 dark:text-white font-sans">
+                        Construa consistência, <br className="hidden md:block" />
+                        desbloqueie sua <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-teal-400">melhor versão</span>.
+                    </h1>
+                    <p className="mt-6 text-xl md:text-2xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
+                        A ciência comportamental encontra a gamificação. Desenvolva hábitos sustentáveis e alcance seus objetivos sem pressão ou culpa.
+                    </p>
+                    
+                    <InlineSignupForm planName="Flow Starter" />
+                    
+                    <p className="mt-4 text-xs text-slate-400 dark:text-slate-500">
+                        Plano <strong>Flow Starter</strong> é gratuito para sempre. Sem necessidade de cartão de crédito.
+                    </p>
+                </div>
             </div>
-          ))}
         </div>
-      </div>
     </section>
-  );
-};
-
-// --------------------------
-// 10. CTA FINAL
-// --------------------------
-const FinalCTASection = () => (
-  <section className="py-24 bg-blue-600 text-center text-white">
-    <h2 className="text-3xl font-extrabold">Pronto para transformar sua vida?</h2>
-    <p className="mt-4 text-lg">A oferta pode sair do ar a qualquer momento.</p>
-
-    <Link
-      to="/checkout"
-      className="mt-8 inline-block bg-white text-blue-700 font-bold py-4 px-8 rounded-md transition-transform hover:scale-105"
-    >
-      QUERO COMEÇAR AGORA
-    </Link>
-  </section>
 );
 
-// --------------------------
-// HOME PAGE (FINAL)
-// --------------------------
-const HomePage = () => {
+
+const FeaturesSection: React.FC = () => {
+    const features = [
+        {
+            icon: <ShieldIcon className="h-8 w-8 text-indigo-600 dark:text-indigo-400" />,
+            title: 'Streak Shield',
+            description: 'A vida acontece. Nosso escudo protege sua sequência se você perder um dia, eliminando a culpa e mantendo a motivação.'
+        },
+        {
+            icon: <ZapIcon className="h-8 w-8 text-amber-500 dark:text-amber-400" />,
+            title: 'Jornada Gamificada',
+            description: 'Ganhe XP a cada check-in, suba de nível e desbloqueie temas visuais exclusivos. Torne seu progresso viciante.'
+        },
+        {
+            icon: <CheckCircleIcon className="h-8 w-8 text-teal-500 dark:text-teal-400" />,
+            title: 'Esquadrões & Saúde',
+            description: 'Crie grupos de responsabilidade com amigos e integre seus dados automaticamente com Apple Health e Google Fit.'
+        }
+    ];
+    return (
+        <section id="features" className="py-24 bg-white dark:bg-slate-800">
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="text-center mb-16">
+                    <h2 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white">Ciência + Diversão = <span className="text-indigo-600">Hábito</span></h2>
+                    <p className="mt-4 text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
+                        Abandonamos a produtividade tóxica. O HabitFlow foi desenhado para celebrar o progresso, não a perfeição.
+                    </p>
+                </div>
+                <div className="grid md:grid-cols-3 gap-8 lg:gap-12">
+                     {features.map(feature => (
+                         <div key={feature.title} className="group p-8 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-700 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                             <div className="w-14 h-14 flex items-center justify-center bg-white dark:bg-slate-800 rounded-2xl shadow-sm mb-6 group-hover:scale-110 transition-transform">
+                                 {feature.icon}
+                             </div>
+                             <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">{feature.title}</h3>
+                             <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
+                                 {feature.description}
+                             </p>
+                         </div>
+                     ))}
+                </div>
+            </div>
+        </section>
+    );
+};
+
+const CommunitySection: React.FC = () => {
+    const scrollContainer = useRef<HTMLDivElement>(null);
+    return (
+        <section id="community" className="py-24 overflow-hidden bg-indigo-50/50 dark:bg-slate-900/50">
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="text-center mb-12">
+                    <h2 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Histórias de quem desbloqueou sua melhor versão</h2>
+                    <p className="mt-2 text-lg text-slate-600 dark:text-slate-400">Junte-se a milhares de 'Flowres' que transformaram sua rotina.</p>
+                </div>
+                <div ref={scrollContainer} className="mt-8 flex space-x-6 overflow-x-auto pb-8 snap-x snap-mandatory scrollbar-hide px-4">
+                    {TESTIMONIALS.map((testimonial, index) => (
+                        <div key={index} className="snap-center flex-shrink-0 w-80 md:w-96 bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 hover:shadow-md transition-shadow">
+                            <div className="flex mb-4">
+                                {[...Array(5)].map((_, i) => (
+                                    <svg key={i} className="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                    </svg>
+                                ))}
+                            </div>
+                            <p className="text-slate-700 dark:text-slate-300 italic leading-relaxed">"{testimonial.quote}"</p>
+                            <div className="flex items-center mt-6 border-t border-slate-100 dark:border-slate-700 pt-4">
+                                <img src={testimonial.avatarUrl} alt={testimonial.author} className="h-12 w-12 rounded-full object-cover ring-2 ring-indigo-100" />
+                                <div className="ml-4">
+                                    <p className="font-bold text-slate-900 dark:text-white">{testimonial.author}</p>
+                                    <p className="text-sm text-slate-500">{testimonial.role}</p>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </section>
+    );
+};
+
+const CTASection: React.FC = () => (
+    <section id="cta" className="py-24 bg-gradient-to-br from-indigo-600 to-indigo-800 relative overflow-hidden">
+        <div className="absolute inset-0 opacity-10 pattern-dots"></div>
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+            <h2 className="text-4xl font-extrabold text-white mb-6">Pronto para dominar sua rotina?</h2>
+            <p className="text-xl text-indigo-100 max-w-2xl mx-auto mb-10">
+                Comece hoje com o plano Flow Starter. Sem custos, sem pegadinhas, apenas progresso.
+            </p>
+            <div className="flex flex-col sm:flex-row justify-center gap-4">
+                <button className="bg-white text-indigo-700 font-bold py-4 px-10 rounded-full transition-transform transform hover:scale-105 shadow-xl hover:shadow-2xl">
+                    Criar Conta Grátis
+                </button>
+                <Link to="/features" className="bg-indigo-700 text-white border border-indigo-500 font-bold py-4 px-10 rounded-full transition-colors hover:bg-indigo-600">
+                    Ver Todas Funcionalidades
+                </Link>
+            </div>
+        </div>
+    </section>
+);
+
+const HomePage: React.FC = () => {
   return (
-    <>
+    <div className="font-sans text-slate-900 bg-slate-50 dark:bg-slate-900 selection:bg-teal-200 selection:text-teal-900">
       <HeroSection />
-      <ProblemSection />
-      <SolutionSection />
-      <ReceiveSection />
-      <TestimonialsSection />
-      <BeforeAfterSection />
-      <StepsSection />
-      <AuthorSection />
-      <FAQSection />
-      <FinalCTASection />
-    </>
+      <FeaturesSection />
+      <CommunitySection />
+      <CTASection />
+    </div>
   );
 };
 
