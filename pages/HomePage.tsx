@@ -1,210 +1,242 @@
-import React, { useState, useRef } from 'react';
-import { Link } from 'react-router-dom';
-import { TESTIMONIALS } from '../constants';
-import { CheckCircleIcon, ZapIcon, ShieldIcon } from '../components/icons';
+/* HabitFlowLanding.tsx */
+import React, { useEffect, useState, useRef } from 'react';
+import styles from './HabitFlowLanding.module.css';
 
-// --- SHARED COMPONENTS ---
-
-// InlineSignupForm Component (Adapted for Freemium Model)
-interface InlineSignupFormProps {
-    planName: string;
-}
-const InlineSignupForm: React.FC<InlineSignupFormProps> = ({ planName }) => {
-    const [email, setEmail] = useState('');
-    const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
-    const [message, setMessage] = useState('');
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setStatus('loading');
-        setMessage('');
-
-        // Simulate API call for signup
-        await new Promise(resolve => setTimeout(resolve, 1500));
-
-        if (email && email.includes('@')) {
-            setStatus('success');
-            setMessage(`Bem-vindo ao Esquadrão! Enviamos o link de acesso ao ${planName} para seu email.`);
-        } else {
-            setStatus('error');
-            setMessage('Por favor, insira um email válido para iniciar sua jornada.');
-        }
-    };
-
-    return (
-        <form onSubmit={handleSubmit} className="mt-8 w-full max-w-lg mx-auto">
-            <div className="flex flex-col sm:flex-row gap-3">
-                <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Seu melhor email"
-                    required
-                    className="flex-grow px-5 py-4 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all shadow-sm text-slate-900 dark:text-white"
-                    disabled={status === 'loading'}
-                />
-                <button
-                    type="submit"
-                    className="bg-teal-500 hover:bg-teal-600 text-white font-bold py-4 px-8 rounded-full transition-all transform hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 disabled:bg-opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
-                    disabled={status === 'loading'}
-                >
-                    {status === 'loading' ? 'Iniciando...' : 'Começar Grátis'}
-                </button>
-            </div>
-            {message && (
-                <p className={`mt-4 text-sm font-medium ${status === 'success' ? 'text-teal-600 dark:text-teal-400' : 'text-rose-500 dark:text-rose-400'}`}>
-                    {message}
-                </p>
-            )}
-        </form>
-    );
-};
-
-// --- SECTIONS ---
-
-const HeroSection: React.FC = () => (
-    <section className="py-24 md:py-36 bg-slate-50 dark:bg-slate-900 relative overflow-hidden">
-        {/* Decorative background elements reflecting the 'Mint/Lilac' palette */}
-        <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none opacity-30">
-            <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-indigo-300 rounded-full blur-3xl filter mix-blend-multiply dark:mix-blend-overlay"></div>
-            <div className="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-teal-200 rounded-full blur-3xl filter mix-blend-multiply dark:mix-blend-overlay"></div>
-        </div>
-
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div className="flex flex-col gap-10 items-center">
-                <div className="text-center max-w-4xl">
-                    <span className="inline-block py-1 px-3 rounded-full bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300 text-xs font-bold tracking-wide mb-6 uppercase">
-                        Disponível para iOS, Android & Web
-                    </span>
-                    <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-slate-900 dark:text-white font-sans">
-                        Construa consistência, <br className="hidden md:block" />
-                        desbloqueie sua <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-teal-400">melhor versão</span>.
-                    </h1>
-                    <p className="mt-6 text-xl md:text-2xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed">
-                        A ciência comportamental encontra a gamificação. Desenvolva hábitos sustentáveis e alcance seus objetivos sem pressão ou culpa.
-                    </p>
-                    
-                    <InlineSignupForm planName="Flow Starter" />
-                    
-                    <p className="mt-4 text-xs text-slate-400 dark:text-slate-500">
-                        Plano <strong>Flow Starter</strong> é gratuito para sempre. Sem necessidade de cartão de crédito.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
+// Componentes de Ícones minimalistas (SVG inline para evitar dependências externas)
+const ShieldIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+  </svg>
 );
 
-
-const FeaturesSection: React.FC = () => {
-    const features = [
-        {
-            icon: <ShieldIcon className="h-8 w-8 text-indigo-600 dark:text-indigo-400" />,
-            title: 'Streak Shield',
-            description: 'A vida acontece. Nosso escudo protege sua sequência se você perder um dia, eliminando a culpa e mantendo a motivação.'
-        },
-        {
-            icon: <ZapIcon className="h-8 w-8 text-amber-500 dark:text-amber-400" />,
-            title: 'Jornada Gamificada',
-            description: 'Ganhe XP a cada check-in, suba de nível e desbloqueie temas visuais exclusivos. Torne seu progresso viciante.'
-        },
-        {
-            icon: <CheckCircleIcon className="h-8 w-8 text-teal-500 dark:text-teal-400" />,
-            title: 'Esquadrões & Saúde',
-            description: 'Crie grupos de responsabilidade com amigos e integre seus dados automaticamente com Apple Health e Google Fit.'
-        }
-    ];
-    return (
-        <section id="features" className="py-24 bg-white dark:bg-slate-800">
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="text-center mb-16">
-                    <h2 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white">Ciência + Diversão = <span className="text-indigo-600">Hábito</span></h2>
-                    <p className="mt-4 text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
-                        Abandonamos a produtividade tóxica. O HabitFlow foi desenhado para celebrar o progresso, não a perfeição.
-                    </p>
-                </div>
-                <div className="grid md:grid-cols-3 gap-8 lg:gap-12">
-                     {features.map(feature => (
-                         <div key={feature.title} className="group p-8 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-700 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-                             <div className="w-14 h-14 flex items-center justify-center bg-white dark:bg-slate-800 rounded-2xl shadow-sm mb-6 group-hover:scale-110 transition-transform">
-                                 {feature.icon}
-                             </div>
-                             <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">{feature.title}</h3>
-                             <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
-                                 {feature.description}
-                             </p>
-                         </div>
-                     ))}
-                </div>
-            </div>
-        </section>
-    );
-};
-
-const CommunitySection: React.FC = () => {
-    const scrollContainer = useRef<HTMLDivElement>(null);
-    return (
-        <section id="community" className="py-24 overflow-hidden bg-indigo-50/50 dark:bg-slate-900/50">
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="text-center mb-12">
-                    <h2 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Histórias de quem desbloqueou sua melhor versão</h2>
-                    <p className="mt-2 text-lg text-slate-600 dark:text-slate-400">Junte-se a milhares de 'Flowres' que transformaram sua rotina.</p>
-                </div>
-                <div ref={scrollContainer} className="mt-8 flex space-x-6 overflow-x-auto pb-8 snap-x snap-mandatory scrollbar-hide px-4">
-                    {TESTIMONIALS.map((testimonial, index) => (
-                        <div key={index} className="snap-center flex-shrink-0 w-80 md:w-96 bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 hover:shadow-md transition-shadow">
-                            <div className="flex mb-4">
-                                {[...Array(5)].map((_, i) => (
-                                    <svg key={i} className="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                    </svg>
-                                ))}
-                            </div>
-                            <p className="text-slate-700 dark:text-slate-300 italic leading-relaxed">"{testimonial.quote}"</p>
-                            <div className="flex items-center mt-6 border-t border-slate-100 dark:border-slate-700 pt-4">
-                                <img src={testimonial.avatarUrl} alt={testimonial.author} className="h-12 w-12 rounded-full object-cover ring-2 ring-indigo-100" />
-                                <div className="ml-4">
-                                    <p className="font-bold text-slate-900 dark:text-white">{testimonial.author}</p>
-                                    <p className="text-sm text-slate-500">{testimonial.role}</p>
-                                </div>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </div>
-        </section>
-    );
-};
-
-const CTASection: React.FC = () => (
-    <section id="cta" className="py-24 bg-gradient-to-br from-indigo-600 to-indigo-800 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10 pattern-dots"></div>
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-            <h2 className="text-4xl font-extrabold text-white mb-6">Pronto para dominar sua rotina?</h2>
-            <p className="text-xl text-indigo-100 max-w-2xl mx-auto mb-10">
-                Comece hoje com o plano Flow Starter. Sem custos, sem pegadinhas, apenas progresso.
-            </p>
-            <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <button className="bg-white text-indigo-700 font-bold py-4 px-10 rounded-full transition-transform transform hover:scale-105 shadow-xl hover:shadow-2xl">
-                    Criar Conta Grátis
-                </button>
-                <Link to="/features" className="bg-indigo-700 text-white border border-indigo-500 font-bold py-4 px-10 rounded-full transition-colors hover:bg-indigo-600">
-                    Ver Todas Funcionalidades
-                </Link>
-            </div>
-        </div>
-    </section>
+const StarIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+  </svg>
 );
 
-const HomePage: React.FC = () => {
+const UsersIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+    <circle cx="9" cy="7" r="4" />
+    <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+  </svg>
+);
+
+const ActivityIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+  </svg>
+);
+
+const PhoneIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="5" y="2" width="14" height="20" rx="2" ry="2" />
+    <line x1="12" y1="18" x2="12.01" y2="18" />
+  </svg>
+);
+
+const HabitFlowLanding: React.FC = () => {
+  const [xpProgress, setXpProgress] = useState(0);
+  const progressRef = useRef<HTMLDivElement>(null);
+
+  // Microinteração: Animação da barra de progresso ao carregar
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setXpProgress(75); // Simula 75% de progresso
+    }, 500);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
-    <div className="font-sans text-slate-900 bg-slate-50 dark:bg-slate-900 selection:bg-teal-200 selection:text-teal-900">
-      <HeroSection />
-      <FeaturesSection />
-      <CommunitySection />
-      <CTASection />
+    <div className={styles.landingWrapper}>
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+      
+      {/* HEADER */}
+      <header className={styles.header}>
+        <div className={styles.container}>
+          <div className={styles.navRow}>
+            <div className={styles.logo} aria-label="HabitFlow">
+              HabitFlow
+            </div>
+            <nav className={styles.navLinks}>
+              <a href="#features">Funcionalidades</a>
+              <a href="#community">Comunidade</a>
+              <a href="#pricing">Planos</a>
+            </nav>
+          </div>
+        </div>
+      </header>
+
+      <main>
+        {/* HERO SECTION */}
+        <section className={styles.hero}>
+          <div className={styles.container}>
+            <h1 className={styles.heroTitle}>
+              Construa consistência,<br />
+              <span className={styles.textGradient}>desbloqueie sua melhor versão.</span>
+            </h1>
+            <p className={styles.heroSubtitle}>
+              App de gestão de hábitos gamificado que usa ciência comportamental para transformar sua rotina em uma jornada divertida e prática.
+            </p>
+            <div className={styles.ctaGroup}>
+              <a href="#signup" className={styles.btnPrimary}>Comece Grátis</a>
+            </div>
+          </div>
+        </section>
+
+        {/* FEATURE GRID */}
+        <section id="features" className={styles.features}>
+          <div className={styles.container}>
+            <div className={styles.grid}>
+              <div className={styles.featureCard}>
+                <div className={styles.iconBox}><ShieldIcon /></div>
+                <h3>Streak Shield</h3>
+                <p>Imprevistos acontecem. Congele sua sequência por até 3 dias e não perca o progresso.</p>
+              </div>
+              <div className={styles.featureCard}>
+                <div className={styles.iconBox}><StarIcon /></div>
+                <h3>Jornada de Nível</h3>
+                <p>Ganhe XP, suba de nível e desbloqueie recompensas visuais a cada hábito completado.</p>
+              </div>
+              <div className={styles.featureCard}>
+                <div className={styles.iconBox}><PhoneIcon /></div>
+                <h3>Widget Interativo</h3>
+                <p>Marque seus hábitos feitos diretamente da tela inicial do seu celular.</p>
+              </div>
+              <div className={styles.featureCard}>
+                <div className={styles.iconBox}><UsersIcon /></div>
+                <h3>Esquadrões</h3>
+                <p>Grupos de responsabilidade de até 5 pessoas para manter a motivação em alta.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* GAMIFICATION / XP SECTION */}
+        <section className={styles.gamification}>
+          <div className={styles.container}>
+            <div className={styles.xpContainer}>
+              <div className={styles.xpHeader}>
+                <span className={styles.levelBadge}>Nível 5</span>
+                <span className={styles.xpStats}>XP: {xpProgress * 40} / 4000</span>
+              </div>
+              <div 
+                className={styles.progressBarTrack} 
+                role="progressbar" 
+                aria-valuenow={xpProgress} 
+                aria-valuemin={0} 
+                aria-valuemax={100}
+                aria-label="Progresso para o próximo nível"
+              >
+                <div 
+                  className={styles.progressBarFill} 
+                  style={{ width: `${xpProgress}%` }}
+                  ref={progressRef}
+                />
+              </div>
+              <p className={styles.xpMicrocopy}>
+                Você está a apenas 3 hábitos de desbloquear a badge "Mestre da Manhã"!
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* STREAK SHIELD DEEP DIVE */}
+        <section className={styles.streakShieldSection}>
+          <div className={styles.container}>
+            <div className={styles.shieldContent}>
+              <div className={styles.shieldIconLarge}>🛡️</div>
+              <h2>Proteja Sua Sequência</h2>
+              <p>
+                A vida não é linear. Use suas moedas virtuais para ativar o <strong>Streak Shield</strong> e 
+                mantenha sua motivação mesmo nos dias difíceis.
+              </p>
+              <a href="#squad" className={styles.btnSecondary}>Junte-se ao Seu Esquadrão</a>
+            </div>
+          </div>
+        </section>
+
+        {/* SQUADS / COMMUNITY */}
+        <section id="community" className={styles.squads}>
+          <div className={styles.container}>
+            <h2 className={styles.sectionTitle}>Comunidade HabitFlow</h2>
+            <p className={styles.sectionSubtitle}>Você é a média das 5 pessoas com quem mais convive.</p>
+            
+            <div className={styles.squadGrid}>
+              <div className={styles.squadCard}>
+                <div className={styles.squadHeader}>Esquadrão Alpha</div>
+                <p>Focado em alta performance e leitura.</p>
+                <button className={styles.btnOutline}>Entrar</button>
+              </div>
+              <div className={styles.squadCard}>
+                <div className={styles.squadHeader}>Morning Club</div>
+                <p>Acordar cedo e exercícios físicos.</p>
+                <button className={styles.btnOutline}>Entrar</button>
+              </div>
+              <div className={styles.squadCard}>
+                <div className={styles.squadHeader}>Zen Masters</div>
+                <p>Meditação e hábitos de mindfulness.</p>
+                <button className={styles.btnOutline}>Entrar</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* HEALTH INTEGRATION */}
+        <section className={styles.integrations}>
+          <div className={styles.container}>
+            <div className={styles.integrationBox}>
+              <div className={styles.iconRow}>
+                <ActivityIcon />
+              </div>
+              <h3>Sincronização Automática</h3>
+              <p>
+                Integração perfeita com <strong>Apple Health</strong> e <strong>Google Fit</strong>. 
+                Seus passos e horas de sono contam XP automaticamente.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* PRICING */}
+        <section id="pricing" className={styles.pricing}>
+          <div className={styles.container}>
+            <div className={styles.pricingCard}>
+              <span className={styles.badge}>Recomendado</span>
+              <h2>Flow Starter</h2>
+              <p className={styles.price}>Gratuito</p>
+              <ul className={styles.benefitsList}>
+                <li>✅ Rastreamento ilimitado de hábitos</li>
+                <li>✅ Acesso ao Streak Shield básico</li>
+                <li>✅ 1 Esquadrão de responsabilidade</li>
+              </ul>
+              <a href="#signup" className={styles.btnPrimary}>Comece Grátis</a>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      {/* FOOTER */}
+      <footer className={styles.footer}>
+        <div className={styles.container}>
+          <div className={styles.footerContent}>
+            <p>&copy; {new Date().getFullYear()} HabitFlow. Construa consistência.</p>
+            <div className={styles.footerLinks}>
+              <a href="#">Privacidade</a>
+              <a href="#">Termos</a>
+              <a href="#">Twitter</a>
+              <a href="#">Instagram</a>
+            </div>
+          </div>
+          <p className={styles.disclaimer}>
+            *Os resultados podem variar de acordo com o comprometimento individual.
+          </p>
+        </div>
+      </footer>
     </div>
   );
 };
 
-export default HomePage;
+export default HabitFlowLanding;
