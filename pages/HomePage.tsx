@@ -1,6 +1,8 @@
 /* HabitFlowLanding.tsx */
-import React, { useEffect, useState, useRef } from 'react';
-import styles from './HabitFlowLanding.module.css';
+import React, { useState, useRef } from 'react';
+import { Link } from 'react-router-dom';
+import { TESTIMONIALS } from '../constants';
+import { CheckCircleIcon, ZapIcon, ShieldIcon } from '../components/icons';
 
 // Componentes de Ícones minimalistas (SVG inline para evitar dependências externas)
 const ShieldIcon = () => (
